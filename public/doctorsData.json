@@ -1,0 +1,111 @@
+[
+    {
+      "id": 1,
+      "name": "Dr. John Doe",
+      "specialization": "Cardiologist",
+      "experience": 16,
+      "rating": 5,
+      "gender": "Male",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 2,
+      "name": "Dr. Sarah Smith",
+      "specialization": "Dermatologist",
+      "experience": 12,
+      "rating": 4,
+      "gender": "Female",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 3,
+      "name": "Dr. Michael Brown",
+      "specialization": "Orthopedic",
+      "experience": 8,
+      "rating": 3,
+      "gender": "Male",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 4,
+      "name": "Dr. Lisa Adams",
+      "specialization": "Neurologist",
+      "experience": 2,
+      "rating": 5,
+      "gender": "Female",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 5,
+      "name": "Dr. Emily Johnson",
+      "specialization": "Pediatrician",
+      "experience": 10,
+      "rating": 4,
+      "gender": "Female",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 6,
+      "name": "Dr. Robert Wilson",
+      "specialization": "General Surgeon",
+      "experience": 15,
+      "rating": 5,
+      "gender": "Male",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 7,
+      "name": "Dr. Olivia Martinez",
+      "specialization": "Gynecologist",
+      "experience": 7,
+      "rating": 4,
+      "gender": "Female",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 8,
+      "name": "Dr. William Anderson",
+      "specialization": "ENT Specialist",
+      "experience": 5,
+      "rating": 3,
+      "gender": "Male",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 9,
+      "name": "Dr. Sophia Thomas",
+      "specialization": "Endocrinologist",
+      "experience": 11,
+      "rating": 5,
+      "gender": "Female",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 10,
+      "name": "Dr. Daniel White",
+      "specialization": "Urologist",
+      "experience": 3,
+      "rating": 4,
+      "gender": "Male",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 11,
+      "name": "Dr. Isabella Garcia",
+      "specialization": "Oncologist",
+      "experience": 9,
+      "rating": 5,
+      "gender": "Female",
+      "image": "https://via.placeholder.com/80"
+    },
+    {
+      "id": 12,
+      "name": "Dr. James Hall",
+      "specialization": "Pulmonologist",
+      "experience": 6,
+      "rating": 3,
+      "gender": "Male",
+      "image": "https://via.placeholder.com/80"
+    }
+  ]
+  

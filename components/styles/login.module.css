@@ -1,0 +1,121 @@
+/* Full-screen container */
+.login-container {
+    width: 100%;
+    height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url("../../public/loginBackground.png") center/cover no-repeat;
+    position: relative;
+    
+  }
+  .login-header{
+    display: flex;
+    align-self: flex-start;
+    margin-bottom: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  } 
+  
+  .login-form{
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 100%;
+  }
+  
+  .login-header h2{
+    font-weight: 500;
+  }
+  
+  /* Login Box */
+  .login-box {
+    position: relative;
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    padding:25Px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    text-align: left;
+    width: 400px;
+    height: 400px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px); /* Apply blur inside the login box */
+    z-index: 1;
+  }
+  
+  
+  /* Form Inputs */
+ .login-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  .login-form label{
+    color:#8C8C8C
+
+  }
+  /* Button Group */
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+ .button-group button {
+    width: 100%;
+    padding: 10px;
+
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .login-button{
+    background-color: #1C4A2A;
+  }
+  
+  button:hover {
+    background: #0056b3;
+  }
+  .reset-button{
+    background-color:#C6B09A;
+    ;
+  }
+  
+  /* Forgot Password */
+  .forgot-password {
+    align-self:center; 
+    background: transparent;
+    color:black;
+    
+  }
+  
+  .forgot-password:hover {
+    color: #0056b3;
+  }
+  
+  /* Sign-up Message */
+  .signup-message {
+    margin-top: 15px;
+    font-size: 10px;
+    color:#8C8C8C
+    
+  }
+  
+  .signup-message a {
+    color:#1C4A2A;
+    text-decoration: none;
+    /* font-weight: bold; */
+  }
+  
+  .signup-message a:hover {
+    text-decoration: underline;
+  }
+  
