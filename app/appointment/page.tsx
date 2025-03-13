@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "../../components/styles/appointments.module.css";
 import Footer from "@/components/footer";
+import Link from "next/link";
 interface Doctor {
   id: number;
   name: string;
@@ -22,8 +23,8 @@ const fetchDoctors = async (): Promise<Doctor[]> => {
 const DoctorsList = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [search, setSearch] = useState("");
-  const [experience, setExperience] = useState("showAll");
-  const [rating, setRating] = useState("");
+  const [experience, setExperience] = useState("");
+  const [rating, setRating] = useState("showAll");
   const [gender, setGender] = useState("showAll");
 
   useEffect(() => {
@@ -33,22 +34,24 @@ const DoctorsList = () => {
   // Function to reset all filters
   const resetFilters = () => {
     setSearch("");
-    setExperience("showAll");
-    setRating("");
+    setExperience("");
+    setRating("showAll");
     setGender("showAll");
   };
 
   const filteredDoctors = doctors.filter((doctor) => {
     return (
-      doctor.name.toLowerCase().includes(search.toLowerCase()) &&
-      (experience === "showAll" ||
-        (experience === "15+" && doctor.experience >= 15) ||
-        (experience === "10-15" && doctor.experience >= 10 && doctor.experience < 15) ||
-        (experience === "5-10" && doctor.experience >= 5 && doctor.experience < 10) ||
-        (experience === "3-5" && doctor.experience >= 3 && doctor.experience < 5) ||
-        (experience === "1-3" && doctor.experience >= 1 && doctor.experience < 3) ||
-        (experience === "0-1" && doctor.experience < 1)) &&
-      (rating === "" || doctor.rating === parseInt(rating)) &&
+      doctor.name.toLowerCase().includes(search.toLowerCase())||doctor.specialization.toLowerCase().includes(search.toLowerCase()) &&
+      (
+        experience === "" || 
+         
+          (experience === "15+" && doctor.experience >= 15) ||
+          (experience === "10-15" && doctor.experience >= 10 && doctor.experience < 15) ||
+          (experience === "5-10" && doctor.experience >= 5 && doctor.experience < 10) ||
+          (experience === "3-5" && doctor.experience >= 3 && doctor.experience < 5) ||
+          (experience === "1-3" && doctor.experience >= 1 && doctor.experience < 3) ||
+          (experience === "0-1" && doctor.experience < 1))&&
+      (rating === "showAll" || doctor.rating === parseInt(rating)) &&
       (gender === "showAll" || doctor.gender === gender)
     );
   });
@@ -56,6 +59,7 @@ const DoctorsList = () => {
   return (
     <><div className={styles.container}>
       {/* Search Bar */}
+      <div className={styles.boxShadow}>
       <div className={styles.searchSection}>
         <div className={styles.searchTitle}>Find a doctor at your own ease</div>
 
@@ -68,6 +72,7 @@ const DoctorsList = () => {
           <button type="submit" className={styles.searchBtn}>Search</button>
 
         </div>
+      </div>
       </div>
       <div className={styles.doctorCount}>
         <h2>{filteredDoctors.length} Doctors Available</h2>
@@ -88,27 +93,10 @@ const DoctorsList = () => {
               Reset
             </button>
           </div>
-
-          {/* Experience */}
-          <div className={styles.filterGroup}>
-            <h4>Experience</h4>
-            {["showAll", "15+", "10-15", "5-10", "3-5", "1-3", "0-1"].map((exp) => (
-              <label key={exp}>
-                <input
-                  type="radio"
-                  name="experience"
-                  value={exp}
-                  checked={experience === exp}
-                  onChange={() => setExperience(exp)} />
-                {exp === "showAll" ? "Show All" : ` ${exp} Years`}
-              </label>
-            ))}
-          </div>
-
-          {/* Rating */}
+  {/* Rating */}
           <div className={styles.filterGroup}>
             <h4>Rating</h4>
-            {[1, 2, 3, 4, 5].map((star) => (
+            {["showAll", 1, 2, 3, 4, 5].map((star) => (
               <label key={star}>
                 <input
                   type="radio"
@@ -116,11 +104,29 @@ const DoctorsList = () => {
                   value={star.toString()}
                   checked={rating === star.toString()}
                   onChange={() => setRating(star.toString())} />
-                {star} star
+                {star=== "showAll" ? "Show All" : ` ${star} Star`}
               </label>
             ))}
           </div>
 
+          {/* Experience */}
+          <div className={styles.filterGroup}>
+            <h4>Experience</h4>
+            {[ "15+", "10-15", "5-10", "3-5", "1-3", "0-1"].map((exp) => (
+              <label key={exp}>
+                <input
+                  type="radio"
+                  name="experience"
+                  value={exp}
+                  checked={experience === exp}
+                  onChange={() => setExperience(exp)} />
+                {exp} Years
+              </label>
+            ))}
+          </div>
+
+        
+         
           {/* Gender */}
           <div className={styles.filterGroup}>
             <h4>Gender</h4>
@@ -145,17 +151,27 @@ const DoctorsList = () => {
           <div className={styles.doctorsList}>
             {filteredDoctors.length > 0 ? (
               filteredDoctors.map((doctor) => (
+                 <Link href ={ `./doctor-profile/${doctor.id}`}>
                 <div key={doctor.id} className={styles.card}>
                   <Image src="/Frame.png" alt={doctor.name} width={100} height={100} className={styles.image} />
                   <div className={styles.details}>
                     <h3>{doctor.name}</h3>
-                    <div><p>{doctor.specialization}</p>
-                      <p>{doctor.experience} Years</p> </div>
-
-                    <p>⭐ {doctor.rating}</p>
+                    <div className={styles.rateSpecial}>
+                                       <p> <Image src="/Stethoscope.png" alt={doctor.name} width={17} height={15} className={styles.image} />
+                                       {doctor.specialization}</p>
+                   
+                      <p> <Image src="/Hourglass.png" alt={doctor.name} width={17} height={15} className={styles.image} />{doctor.experience} Years</p> 
+                      </div>
+                      <p>
+                        Ratings: 
+  {Array.from({ length: doctor.rating }, (_, i) => (
+    <span key={i}>⭐</span>
+  ))}
+</p>
                     <button className={styles.bookBtn}>Book Appointment</button>
                   </div>
                 </div>
+                </Link> 
               ))
             ) : (
               <p className={styles.noResults}>No doctors found.</p>

@@ -1,11 +1,16 @@
 .container {
   
   margin: auto;
-  padding: 20px;
+  /* padding: 20px; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap:50px; 
+}
+.boxShadow{
+  box-shadow: 0px 3px 15px 0px #0000001A;
+  width: 100%;
+  padding: 48px 24px;
 }
 .searchSection{
   display: flex;
@@ -13,6 +18,9 @@
   text-align: center;
   font-size: 32px;
   font-weight: 500;
+  width: 100%;
+  
+
 }
 .doctorContainer{
   display: flex;
@@ -25,15 +33,15 @@
   position: sticky;
   top: 0;
   background: white;
-  justify-content: space-between;
+  justify-content: center;
   padding: 10px;
   z-index: 10;
  
 
 }
 .searchBtn{
- width: 15%;
- padding: 2px 42px;
+ width: 8%;
+ padding: 20px 42px;
  background: #1C4A2A;
  color: white;
  border: none;
@@ -41,10 +49,13 @@
  border-bottom-right-radius:10px;
  font-weight: 16px;
  font-weight: 400; 
+ display: flex;
+ justify-content: center;
 }
 
+
 .searchBar input {
-  width: 100%;
+  width: 80%;
   padding: 12px;
   font-size: 18px;
   border: 1px solid #ccc;
@@ -126,15 +137,33 @@
 
 .card {
   width: 30%;
-  min-width:250px ;
+  min-width: 300px;
   background: #F8FCF9;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap:40px;
   text-align: center;
   transition: 0.3s ease-in-out;
   /* height: 40%; */
+  font-size: 16px;
+  
+}
+.rateSpecial{
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+}
+.rateSpecial p{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card:hover {
@@ -146,9 +175,6 @@
   border-radius: 50%;
 }
 
-.details h3 {
-  margin: 10px 0;
-}
 
 .bookBtn {
   width: 100%;
@@ -162,6 +188,7 @@
   cursor: pointer;
   background-color: #F8FCF9;
   transition: 0.3s;
+  margin-top: 40px;
 }
 
 .bookBtn:hover {
@@ -179,7 +206,7 @@
   border: none;
   background-color: white;
   text-align: right;
-  padding-right: 30px;
+  /* padding-right: 30px; */
   color: #1C4A2A;
 }
 .filterheader{
@@ -191,8 +218,4 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-.details>div{
-  display: flex;
-  justify-content: space-around;
 }

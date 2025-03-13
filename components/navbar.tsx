@@ -19,7 +19,7 @@ const Navbar = () => {
       </div>
       <ul className={styles['link-list']}>
         <li><Link href="/">Home</Link></li>
-        <li><Link href="/appointments">Appointment</Link></li>
+        <li><Link href="/appointment">Appointment</Link></li>
         <li><Link href="/healthblog">Health Blog</Link></li>
         <li><Link href="/reviews">Reviews</Link></li>
       </ul>
