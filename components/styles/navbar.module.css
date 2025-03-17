@@ -66,3 +66,126 @@
     border-radius:99px;
     background-color: #1C4A2A;
 }
+.hamburger {
+    /* display: none; */
+    flex-direction: column;
+    cursor: pointer;
+    /* background-color: black; */
+  }
+  
+  .bar {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 4px 0;
+    transition: 0.3s;
+  }
+  
+  /* Opened Hamburger Icon */
+  .open:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  
+  .open:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .open:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+  
+  @media (max-width: 768px) {
+    .list-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 0 16px;
+    }
+  
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+  
+    .bar {
+      width: 25px;
+      height: 3px;
+      background-color: #333;
+      margin: 5px 0;
+      transition: 0.3s;
+    }
+  
+    .nav-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+  
+    .link-list {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      background-color: white;
+      padding: 10px 0;
+      transition: 0.3s ease-in-out;
+    }
+  
+    .link-list.show {
+      display: flex;
+    }
+  
+    /* Ensure buttons are inside the navbar */
+    .buttons {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-top: 10px;
+    }
+  
+    .buttons.show {
+      display: flex;
+    }
+  
+    .buttons button {
+      width: 80%;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+  
+    .login {
+      background-color: transparent;
+      border: 1px solid #007bff;
+      color: #007bff;
+    }
+  
+    .register {
+      background-color: #007bff;
+      color: white;
+      border: none;
+    }
+  
+    /* Hide the buttons outside the hamburger on mobile */
+    @media (max-width: 768px) {
+      .buttons {
+        display: none;
+      }
+  
+      .buttons.show {
+        display: flex;
+      }
+    }
+  }
+  
+  

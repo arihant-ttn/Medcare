@@ -3,11 +3,15 @@
 import Image from "next/image";
 import { useState } from "react";
 import styles from "../../components/styles/appointments-form.module.css";
+import { useRouter, useSearchParams } from "next/navigation";
 import Footer from "@/components/footer";
 import CalendarSlider from "@/components/calendarSlider";
 const MainSection = () => {
   const [selectedShift, setSelectedShift] = useState("morning");
-
+  const searchParams = useSearchParams();
+  
+const docId = searchParams.get("id");
+console.log(docId);
   return (
     <>
       <div className={styles["container"]}>
