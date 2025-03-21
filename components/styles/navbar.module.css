@@ -20,7 +20,7 @@
 .logo-title{
     display: flex;
     justify-content: space-around;
-    width: 150px;
+    /* width: 150px;   */
     align-items: center;
     gap:10px
 }
@@ -67,7 +67,7 @@
     background-color: #1C4A2A;
 }
 .hamburger {
-    /* display: none; */
+    display: none;
     flex-direction: column;
     cursor: pointer;
     /* background-color: black; */
@@ -76,9 +76,16 @@
   .bar {
     width: 25px;
     height: 3px;
-    background: white;
+    background: aqua;
     margin: 4px 0;
     transition: 0.3s;
+    /* z-index: 20; */
+  }
+  .list-buttons{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
   }
   
   /* Opened Hamburger Icon */
@@ -95,97 +102,83 @@
   }
   
   @media (max-width: 768px) {
-    .list-container {
+    .nav-container {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 16px 20px;
+      position: relative;
       width: 100%;
-      padding: 0 16px;
+      background-color: white;
     }
   
     .hamburger {
       display: flex;
       flex-direction: column;
       cursor: pointer;
+      z-index: 20;
     }
   
     .bar {
       width: 25px;
       height: 3px;
       background-color: #333;
-      margin: 5px 0;
+      margin: 4px 0;
       transition: 0.3s;
     }
   
-    .nav-container {
+    /* Hide the list and buttons initially */
+    .list-buttons {
+      display: none;
+      width: 100%;
+      position: absolute;
+      top: 70px; /* Adjusted to avoid overlapping */
+      left: 0;
+      background-color: white;
+      z-index: 10;
+      padding: 10px 0;
+    }
+  
+    /* Show when toggled */
+    .list-buttons.show,
+    .link-list.show,
+    .buttons.show {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
-      position: relative;
+      background-color: white;
+      padding: 10px 0;
+    }
+  
+    .list-buttons.show {
+      margin-top: 10px; /* Adjusted for better spacing */
     }
   
     .link-list {
-      display: none;
-      flex-direction: column;
-      align-items: center;
       width: 100%;
-      position: absolute;
-      top: 60px;
-      left: 0;
-      background-color: white;
-      padding: 10px 0;
-      transition: 0.3s ease-in-out;
+      text-align: center;
+      padding: 0;
     }
   
-    .link-list.show {
-      display: flex;
+    .link-list li {
+      width: 100%;
+      padding: 6px 0;
     }
   
-    /* Ensure buttons are inside the navbar */
     .buttons {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      margin-top: 10px;
-    }
-  
-    .buttons.show {
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      align-items: center;
+      /* margin-top: 10px; */
     }
   
     .buttons button {
-      width: 80%;
+      width: 100%;
       padding: 10px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-  
-    .login {
-      background-color: transparent;
-      border: 1px solid #007bff;
-      color: #007bff;
-    }
-  
-    .register {
-      background-color: #007bff;
-      color: white;
-      border: none;
-    }
-  
-    /* Hide the buttons outside the hamburger on mobile */
-    @media (max-width: 768px) {
-      .buttons {
-        display: none;
-      }
-  
-      .buttons.show {
-        display: flex;
-      }
+      font-size: 12px;
     }
   }
-  
   

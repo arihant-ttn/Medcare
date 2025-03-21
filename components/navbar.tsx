@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
     <nav className={styles["nav-container"]}>
-      <div className={styles["list-container"]}>
+      
         <div className={styles["logo-title"]}>
           <span>
             <div className={styles["frame"]}>
@@ -28,6 +28,7 @@ const Navbar = () => {
         </div>
 
         {/* Navigation Links */}
+        <div className={`${styles["list-buttons"]} ${isOpen ? styles.show : ""}`}>
         <ul className={`${styles["link-list"]} ${isOpen ? styles.show : ""}`}>
           <li><Link href="/" onClick={() => setIsOpen(false)}>Home</Link></li>
           <li><Link href="/appointment" onClick={() => setIsOpen(false)}>Appointment</Link></li>
@@ -35,11 +36,13 @@ const Navbar = () => {
           <li><Link href="/reviews" onClick={() => setIsOpen(false)}>Reviews</Link></li>
 
         </ul>
-      </div>
-      <div className={`${styles.buttons} ${isOpen ? styles.show : ""}`}>
+      
+      <div className={`${styles.buttons}  ${isOpen ? styles.show : ""}`}>
         <Link href="/login"><button onClick={() => setIsOpen(false)} className={styles["login"]}>Login</button></Link>
         <Link href="/signUp"><button onClick={() => setIsOpen(false)} className={styles["register"]}>Register</button></Link>
       </div>
+      </div>
+      
     </nav>
   );
 };

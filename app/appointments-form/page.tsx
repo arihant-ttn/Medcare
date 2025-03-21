@@ -97,7 +97,7 @@ console.log(docId);
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer/>
     </>
   );
 };

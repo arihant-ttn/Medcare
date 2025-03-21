@@ -25,3 +25,8 @@
     color: #25d366; /* WhatsApp green */
   }
   
+  @media (max-width: 768px){
+    .footer{
+      font-size: 0.5em;
+    }
+  }

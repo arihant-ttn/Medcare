@@ -67,4 +67,39 @@
   .hero-button:hover {
     background-color: #0056b3;
   }
-  
+  @media (max-width: 768px){
+    .right-section{
+      display: none;
+    }
+    .left-section{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .hero-content{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* flex-wrap: wrap; */
+      height: 100%;
+      font-size: 2em;
+      max-width: 100%;
+      margin: 20px;
+      padding:10px;
+    }
+    .hero-content h1{
+      font-size: 1em;
+      line-height: 1.5em;
+    }
+    .hero-content p{
+      font-size:0.5em ;
+    }
+    .hero-button{
+      margin-top: 10%;
+      font-size: 0.5em;
+      padding: 10px;
+    }
+  }
