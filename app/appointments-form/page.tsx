@@ -1,17 +1,93 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import styles from "../../components/styles/appointments-form.module.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import Footer from "@/components/footer";
 import CalendarSlider from "@/components/calendarSlider";
+import getUserIdFromToken from "@/components/getUser";
 const MainSection = () => {
-  const [selectedShift, setSelectedShift] = useState("morning");
+  console.log(getUserIdFromToken);
+  const router = useRouter();
   const searchParams = useSearchParams();
-  
-const docId = searchParams.get("id");
-console.log(docId);
+  const token = localStorage.getItem("token");
+  console.log(token);
+  // ✅ Doctor ID from Query Params
+  const docId = searchParams.get("id");
+
+  // ✅ States to Store Form Data
+  const [selectedShift, setSelectedShift] = useState<string | null>(null);
+  const [slot, setSlot] = useState<string | null>(null);
+  const [visitType, setVisitType] = useState<string>("Video Consult"); // Default
+  const [hospital, setHospital] = useState<string>("Medical HeartInstitute Okhla New Delhi");
+  const  [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
+  // ✅ Simulated Logged-in User ID (Replace with actual user ID)
+   // Replace with actual logged-in userId from session/auth
+   
+  // ✅ Handle Slot Selection
+  const handleSlotSelection = (shift: string, slotTime: string) => {
+    console.log(`Selected Shift: ${shift}, Slot: ${slotTime}`);
+    setSelectedShift(shift);
+    setSlot(slotTime);
+  };
+
+  // ✅ Handle Visit Type Toggle
+  const handleVisitTypeChange = (type: string) => {
+    setVisitType(type);
+  };
+
+  // ✅ Handle Hospital Selection
+  const handleHospitalChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setHospital(event.target.value);
+  };
+
+  // ✅ Handle Calendar Date Selection
+  const handleDateSelection = (date: string) => {
+    setSelectedDate(date);
+  };
+
+  // 🎯 Send Data to Backend on Submit
+  const handleSubmit = async () => {
+    if (!slot || !selectedDate || !selectedShift) {
+      alert("❗️ Please select a slot, date, and shift.");
+      return;
+    }
+
+    const appointmentData = {
+      doctorId: docId,
+      userId: userId,
+      visitType,
+      hospital,
+      selectedShift,
+      slot,
+      selectedDate,
+    };
+
+    console.log("✅ Sending Data to Backend:", appointmentData);
+
+    try {
+      const res = await fetch("http://localhost:3000/api/appointments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(appointmentData),
+      });
+
+      if (res.ok) {
+        alert("✅ Appointment booked successfully!");
+        router.push("/appointment-success");
+      } else {
+        throw new Error("Failed to book appointment.");
+      }
+    } catch (error) {
+      console.error("❌ Error:", error);
+      alert("Failed to book appointment. Please try again.");
+    }
+  };
+
   return (
     <>
       <div className={styles["container"]}>
@@ -37,70 +113,121 @@ console.log(docId);
             {/* Header & Book Button */}
             <div className={styles["form-header"]}>
               <h3>Schedule Appointment</h3>
-              <button className={styles["book-btn"]}>Book Appointment</button>
+              <button className={styles["book-btn"]} onClick={handleSubmit}>
+                Book Appointment
+              </button>
             </div>
 
             {/* Toggle for Video or Hospital Visit */}
             <div className={styles["toggle-container"]}>
-              <button className={styles["toggle-btn"]}>Book Video Consult</button>
-              <button className={styles["toggle-btn"]}>Book Hospital Visit</button>
+              <button
+                className={`${styles["toggle-btn"]} ${
+                  visitType === "Video Consult" ? styles["active"] : ""
+                }`}
+                onClick={() => handleVisitTypeChange("Video Consult")}
+              >
+                Book Video Consult
+              </button>
+              <button
+                className={`${styles["toggle-btn"]} ${
+                  visitType === "Hospital Visit" ? styles["active"] : ""
+                }`}
+                onClick={() => handleVisitTypeChange("Hospital Visit")}
+              >
+                Book Hospital Visit
+              </button>
             </div>
 
             {/* Dropdown for Hospital Selection */}
-            <select className={styles["dropdown"]}>
-              <option>Select Hospital</option>
-              <option>City Hospital</option>
-              <option>Green Valley Clinic</option>
-              <option>HealthCare Center</option>
+            <select
+              className={styles["dropdown"]}
+              value={hospital}
+              onChange={handleHospitalChange}
+            >
+              <option value="Medical HeartInstitute Okhla New Delhi">
+                Medical HeartInstitute Okhla New Delhi
+              </option>
+              <option value="Apollo Hospital Delhi">Apollo Hospital Delhi</option>
+              <option value="Fortis Hospital Gurgaon">Fortis Hospital Gurgaon</option>
             </select>
 
-            {/* Calendar Slider (Placeholder) */}
+            {/* Calendar Slider */}
             <div className={styles["calendar-slider"]}>
-               CalendarSlider 
+              <CalendarSlider onDateSelect={handleDateSelection} />
             </div>
 
-            {/* Morning Shift Slots */}
+            {/* Shift & Slot Selection */}
             <div className={styles["shift-container"]}>
-            <div className={styles["shift-section"]}>
-              <h4><Image className = {styles["sun-image"]}src="/sun.png" alt="Hero Image" height={20} width={20} style={{ objectFit: "cover" }} />Morning </h4>
-              <hr />
-              <div className={styles["slot-container"]}>
-                <button className={styles["slot-btn"]}>9:00 AM</button>
-                <button className={styles["slot-btn"]}>9:30 AM</button>
-                <button className={styles["slot-btn"]}>10:00 AM</button>
-                <button className={styles["slot-btn"]}>10:30 AM</button>
-                <button className={styles["slot-btn"]}>9:00 AM</button>
-                <button className={styles["slot-btn"]}>9:30 AM</button>
-                <button className={styles["slot-btn"]}>10:00 AM</button>
-                <button className={styles["slot-btn"]}>10:30 AM</button>
+              {/* Morning Shift Slots */}
+              <div className={styles["shift-section"]}>
+                <h4>
+                  <Image
+                    className={styles["sun-image"]}
+                    src="/sun.png"
+                    alt="Morning Shift"
+                    height={20}
+                    width={20}
+                    style={{ objectFit: "cover" }}
+                  />
+                  Morning
+                </h4>
+                <hr />
+                <div className={styles["slot-container"]}>
+                  {["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM"].map((time) => (
+                    <button
+                      key={time}
+                      className={`${styles["slot-btn"]} ${
+                        slot === time && selectedShift === "Morning" ? styles["activeSlot"] : ""
+                      }`}
+                      onClick={() => handleSlotSelection("Morning", time)}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Afternoon Shift Slots */}
+              <div className={styles["shift-section"]}>
+                <h4>
+                  <Image
+                    className={styles["sun-image"]}
+                    src="/sunset.png"
+                    alt="Afternoon Shift"
+                    height={20}
+                    width={20}
+                    style={{ objectFit: "cover" }}
+                  />
+                  Afternoon
+                </h4>
+                <hr />
+                <div className={styles["slot-container"]}>
+                  {["3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM"].map((time) => (
+                    <button
+                      key={time}
+                      className={`${styles["slot-btn"]} ${
+                        slot === time && selectedShift === "Afternoon" ? styles["activeSlot"] : ""
+                      }`}
+                      onClick={() => handleSlotSelection("Afternoon", time)}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Evening Shift Slots */}
-            <div className={styles["shift-section"]}>
-              <h4><Image className = {styles["sun-image"]}src="/sunset.png" alt="Hero Image" height={20} width={20} style={{ objectFit: "cover" }} />Afternoon</h4>
-              <hr />
-              <div className={styles["slot-container"]}>
-                <button className={styles["slot-btn"]}>5:00 PM</button>
-                <button className={styles["slot-btn"]}>5:30 PM</button>
-                <button className={styles["slot-btn"]}>6:00 PM</button>
-                <button className={styles["slot-btn"]}>6:30 PM</button>
-                <button className={styles["slot-btn"]}>5:00 PM</button>
-                <button className={styles["slot-btn"]}>5:30 PM</button>
-                <button className={styles["slot-btn"]}>6:00 PM</button>
-                <button className={styles["slot-btn"]}>6:30 PM</button> 
-              </div>
-            </div>
-            </div>
-          
-          <button className={styles["next-button"]}>Next</button>
+            {/* Next Button */}
+            <button className={styles["next-button"]} onClick={handleSubmit}>
+              Next
+            </button>
           </div>
         </div>
       </div>
-      <Footer/>
+
+      <Footer />
     </>
   );
 };
 
 export default MainSection;
- 

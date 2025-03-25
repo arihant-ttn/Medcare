@@ -4,10 +4,7 @@ import React from "react";
 import Image from "next/image";
 import styles from "../../../components/styles/doctor-profile.module.css";
 import BookBtn from "@/components/BookBtn";
-interface AvailableTimes {
-  morning: string;
-  evening: string;
-}
+
 
 interface Doctor {
   id: number;
@@ -19,13 +16,19 @@ interface Doctor {
   reviews: string[];
   location: string;
   description: string;
-  available_times: AvailableTimes;
+  morning_time_slot:string;
+  evening_time_slot:string;
 }
 
 const getDoctorsData = async (): Promise<Doctor[]> => {
-  const filePath = path.join(process.cwd(), "public", "doctorsData.json");
-  const data = await fs.readFile(filePath, "utf-8");
-  return JSON.parse(data);
+  
+  const res = await fetch("http://localhost:3000/listDoctors"); // Use relative path
+  
+  if (!res.ok) throw new Error("Failed to fetch doctors");
+  const data= await res.json();
+  
+  
+  return data.doctors;
 };
 
 export const generateStaticParams = async () => {
@@ -75,8 +78,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
       {/* Available Times */}
       <div className={styles.availability}>
-        <p>🌞 Morning: {doctor.available_times.morning}</p>
-        <p>🌙 Evening: {doctor.available_times.evening}</p>
+        <p>🌞 Morning: {doctor.morning_time_slot}</p>
+        <p>🌙 Evening: {doctor.evening_time_slot}</p>
       </div>
 
       <p className={styles.location}>📍 {doctor.location}</p>

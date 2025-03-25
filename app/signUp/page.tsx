@@ -1,18 +1,48 @@
 "use client"; // If using Next.js App Router
-import { useState } from "react";
-
+import { useState,ChangeEvent, FormEvent,useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "../../components/styles/signUp.module.css";
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+}
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.replace("/appointment"); // Redirect if logged in
+    }
+  }, []);
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Logging in with", email, password);
-  };
+    const res = await fetch("http://localhost:3000/signUp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
+    if (res.ok) {
+      const data = await res.json();
+      alert("Sign Up Successful ");
+    } else {
+      alert("Error occurred while signing up!");
+    }
+  };
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  
+  
+  
   return (
     <div className={styles["login-container"]}>
       {/* Login Form */}
@@ -28,24 +58,24 @@ const Login = () => {
           <input
             type="text"
             placeholder="Name"
-            
-            onChange={(e) => setEmail(e.target.value)}
+            name="name"
+            onChange={handleChange}
             required
           />
           <label>Email</label>
           <input
             type="email"
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"            
+            onChange={handleChange}
             required
           />
           <label>Password</label>
           <input
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            onChange={handleChange}
             required
           />
           <div className={styles["button-group"]}>

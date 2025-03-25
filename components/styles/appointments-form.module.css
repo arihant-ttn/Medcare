@@ -152,16 +152,16 @@
   .dropdown {
     width: 100%;
     padding: 8px;
-    margin-top: 8px;
+    /* margin-top: 8px; */
     border-radius: 5px;
     border: 1px solid #ccc;
   }
   
   /* Calendar Slider (Placeholder) */
   .calendar-slider {
-    margin-top: 10px;
-    padding: 10px;
-    background: #f0f0f0;
+    
+    padding: 4px;
+    /* background: #f0f0f0; */
     border-radius: 5px;
     text-align: center;
   }
@@ -197,7 +197,7 @@
     height: 100px;
 
     /* margin-top: 10px; */
-    padding: 15px;
+    padding: 12px;
   }
 
   .shift-container h4{
@@ -258,6 +258,10 @@
     flex-grow: 1;
     scroll-behavior: smooth;
   }
+.activeSlot,.active{
+  color:white;
+  background-color:#1C4A2A ;
+}
 
   @media (max-width: 768px){
     .left-section{

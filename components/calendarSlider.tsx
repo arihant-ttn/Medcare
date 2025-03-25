@@ -1,80 +1,141 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import styles from './styles/calendar.module.css'
+interface CalendarSliderProps {
+  initialDate?: Date;
+  onDateSelect?: (date: Date) => void;
+  className?: string;
+}
 
-const CalendarSlider = () => {
-  const today = new Date();
-  const [selectedDate, setSelectedDate] = useState(today);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Generate next 15 days
-  const dates = Array.from({ length: 15 }, (_, i) => {
-    const date = new Date();
-    date.setDate(today.getDate() + i);
-    return date;
-  });
-
-  // Format month title
-  const monthTitle = dates[0].toLocaleString("en-US", {
-    month: "long",
-    year: "numeric",
-  });
-
-  // Scroll left
-  const scrollLeft = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+const CalendarSlider: React.FC<CalendarSliderProps> = ({
+  initialDate = new Date(),
+  onDateSelect,
+}) => {
+  const [currentMonth, setCurrentMonth] = useState<Date>(initialDate);
+  const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
+  const [visibleDates, setVisibleDates] = useState<Date[]>([]);
+  const sliderRef = useRef<HTMLDivElement | null>(null);
+  
+  // Generate dates for the current view
+  useEffect(() => {
+    const dates: Date[] = [];
+    const currentDate = new Date(currentMonth);
+    currentDate.setDate(currentDate.getDate() - 3); // Start 3 days before to populate slider
+    
+    for (let i = 0; i < 10; i++) {
+      const date = new Date(currentDate);
+      dates.push(date);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    setVisibleDates(dates);
+  }, [currentMonth]);
+  
+  // Navigate to previous month
+  const goToPreviousMonth = (): void => {
+    const prevMonth = new Date(currentMonth);
+    prevMonth.setMonth(prevMonth.getMonth() - 1);
+    setCurrentMonth(prevMonth);
   };
-
-  // Scroll right
-  const scrollRight = () => {
-    setCurrentIndex((prev) => Math.min(prev + 1, dates.length - 7));
+  
+  // Navigate to next month
+  const goToNextMonth = (): void => {
+    const nextMonth = new Date(currentMonth);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    setCurrentMonth(nextMonth);
   };
-
+  
+  // Navigate to next week
+  const goToNextWeek = (): void => {
+    const nextWeek = new Date(visibleDates[visibleDates.length - 1]);
+    nextWeek.setDate(nextWeek.getDate() + 1);
+    setCurrentMonth(nextWeek);
+  };
+  const goToPrevWeek = (): void => {
+    const prevWeek = new Date(visibleDates[0]);
+    prevWeek.setDate(prevWeek.getDate() - 7); // Move 7 days back
+    setCurrentMonth(prevWeek);
+  };
+  
+  const handleDateSelect = (date: Date): void => {
+    setSelectedDate(date);
+    if (onDateSelect) {
+      onDateSelect(date);
+    }
+  };
+  
+  const isSelectedDate = (date: Date): boolean => {
+    return date.toDateString() === selectedDate.toDateString();
+  };
+  
+  const formatMonth = (date: Date): string => {
+    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  };
+  
   return (
-    <div className="flex flex-col items-center space-y-3">
-      {/* Month Title with Arrows */}
-      <div className="flex items-center space-x-4">
-        <button
-          onClick={scrollLeft}
-          className="p-2 rounded-full border bg-gray-200 disabled:opacity-50"
-          disabled={currentIndex === 0}
-        >
-          ◀
-        </button>
-        <h2 className="text-lg font-semibold">{monthTitle}</h2>
-        <button
-          onClick={scrollRight}
-          className="p-2 rounded-full border bg-gray-200"
-          disabled={currentIndex >= dates.length - 7}
-        >
-          ▶
-        </button>
-      </div>
+    <div className={styles.container}>
+  {/* Month navigation */}
+  <div className={styles["nav-container"]}>
+    <button 
+      onClick={goToPreviousMonth}
+      className={styles["nav-button"]}
+      aria-label="Previous month"
+    >
+      <ChevronLeft size={18} />
+    </button>
+    <h2 className={styles['month-title']}>{formatMonth(currentMonth)}</h2>
+    <button 
+      onClick={goToNextMonth}
+      className={styles["nav-button"]}
+      aria-label="Next month"
+    >
+      <ChevronRight size={18} />
+    </button>
+  </div>
 
-      {/* Calendar Dates */}
-      <div className="overflow-hidden w-[500px]">
-        <div
-          className="flex space-x-2 transition-transform duration-300"
-          style={{ transform: `translateX(-${currentIndex * 70}px)` }}
+  {/* Date slider */}
+  <div className={styles["slider-container"]}>
+    <div ref={sliderRef} className={styles.slider}>
+      {visibleDates.map((date, index) => (
+        <div 
+          key={index}
+          onClick={() => handleDateSelect(date)}
+          className={`${styles["date-cell"]} ${
+            isSelectedDate(date) ? styles["selected-date"] : ''
+          }`}
+          aria-selected={isSelectedDate(date)}
+          role="gridcell"
         >
-          {dates.map((date, index) => (
-            <button
-              key={index}
-              className={`p-3 border rounded-md w-20 text-center ${
-                date.toDateString() === selectedDate.toDateString()
-                  ? "bg-green-700 text-white"
-                  : "bg-gray-100"
-              }`}
-              onClick={() => setSelectedDate(date)}
-            >
-              <div className="text-sm font-bold">
-                {date.toLocaleString("en-US", { weekday: "short" })}
-              </div>
-              <div className="text-lg">{date.getDate()}</div>
-              <div className="text-sm">{date.toLocaleString("en-US", { month: "short" })}</div>
-            </button>
-          ))}
+          <div className={styles["date-day-number-month"]}>
+          <div className={styles["date-day"]}>
+            {date.toLocaleDateString('en-US', { weekday: 'short' })}
+          </div>
+          <div className={styles["number-month"]}>
+          <div className={styles["date-number"]}>
+            {date.getDate()}
+          </div>
+          <div className={styles["date-month"]}>
+            {date.toLocaleDateString('en-US', { month: 'short' })}
+          </div>
+          </div>
+          </div>
         </div>
-      </div>
+      ))}
     </div>
+
+    {/* Right navigation button */}
+    <button onClick={goToPrevWeek} className={styles['prev-week-button']}><ChevronLeft size={18}/></button>
+    
+    <button 
+      onClick={goToNextWeek}
+      className={styles["next-week-button"]}
+      aria-label="Next week"
+    >
+      <ChevronRight size={18} />
+    </button>
+  </div>
+</div>
+
   );
 };
 
