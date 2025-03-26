@@ -8,21 +8,21 @@ import Footer from "@/components/footer";
 import CalendarSlider from "@/components/calendarSlider";
 import getUserIdFromToken from "@/components/getUser";
 const MainSection = () => {
-  console.log(getUserIdFromToken);
+  // console.log(getUserIdFromToken);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = localStorage.getItem("token");
-  console.log(token);
+  
+  
   // ✅ Doctor ID from Query Params
   const docId = searchParams.get("id");
-
+  const userId = localStorage.getItem("userId");
   // ✅ States to Store Form Data
   const [selectedShift, setSelectedShift] = useState<string | null>(null);
   const [slot, setSlot] = useState<string | null>(null);
   const [visitType, setVisitType] = useState<string>("Video Consult"); // Default
   const [hospital, setHospital] = useState<string>("Medical HeartInstitute Okhla New Delhi");
   const  [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [userId, setUserId] = useState<number | null>(null);
+  // const [userId, setUserId] = useState<number | null>(null);
   // ✅ Simulated Logged-in User ID (Replace with actual user ID)
    // Replace with actual logged-in userId from session/auth
    
@@ -68,7 +68,7 @@ const MainSection = () => {
     console.log("✅ Sending Data to Backend:", appointmentData);
 
     try {
-      const res = await fetch("http://localhost:3000/api/appointments", {
+      const res = await fetch("http://localhost:3000/appointments", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -31,8 +31,9 @@ const Login = () => {
     if (res.ok) {
       const data = await res.json();
       localStorage.setItem("token",data.token);
-
+      localStorage.setItem("userId",data.user.id);
       console.log(data.token);
+      console.log("user ID ", data.user.id);
       // Redirect to /appointment after successful login
       router.replace("/appointment"); 
       
