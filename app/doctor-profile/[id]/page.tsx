@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import styles from "../../../components/styles/doctor-profile.module.css";
 import BookBtn from "@/components/BookBtn";
-
+// import CheckAuth from "@/components/CheckAuth";
 
 interface Doctor {
   id: number;
@@ -47,22 +47,21 @@ const Page = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <div className={styles.container}>
+    <><div className={styles.container}>
       <div className={styles.profile}>
 
-      
-      <Image
-        src="/Frame.png"
-        alt={doctor.name}
-        width={100}
-        height={100}
-        className={styles.image}
-      />
-      <div>
-      <h1 className={styles.name}>{doctor.name}</h1>
 
-      <p className={styles.specialization}>{doctor.specialization}</p>
-      </div>
+        <Image
+          src="/Frame.png"
+          alt={doctor.name}
+          width={100}
+          height={100}
+          className={styles.image} />
+        <div>
+          <h1 className={styles.name}>{doctor.name}</h1>
+
+          <p className={styles.specialization}>{doctor.specialization}</p>
+        </div>
       </div>
       <p className={styles.description}>{doctor.description}</p>
 
@@ -85,9 +84,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
       <p className={styles.location}>📍 {doctor.location}</p>
 
       {/* Book Appointment Button */}
-      <BookBtn className={styles.bookButton} id = {doctor.id}/>
-      
-    </div>
+      <BookBtn className={styles.bookButton} id={doctor.id} />
+
+    </div></>
   );
 };
 

@@ -6,7 +6,7 @@ import styles from "../../components/styles/appointments-form.module.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import Footer from "@/components/footer";
 import CalendarSlider from "@/components/calendarSlider";
-import getUserIdFromToken from "@/components/getUser";
+import CheckAuth from "@/components/CheckAuth";
 const MainSection = () => {
   // console.log(getUserIdFromToken);
   const router = useRouter();
@@ -90,6 +90,7 @@ const MainSection = () => {
 
   return (
     <>
+    <CheckAuth/>
       <div className={styles["container"]}>
         {/* Left Section */}
         <div className={styles["left-section"]}>
@@ -147,8 +148,7 @@ const MainSection = () => {
               <option value="Medical HeartInstitute Okhla New Delhi">
                 Medical HeartInstitute Okhla New Delhi
               </option>
-              <option value="Apollo Hospital Delhi">Apollo Hospital Delhi</option>
-              <option value="Fortis Hospital Gurgaon">Fortis Hospital Gurgaon</option>
+          
             </select>
 
             {/* Calendar Slider */}

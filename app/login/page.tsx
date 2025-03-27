@@ -1,5 +1,5 @@
 "use client"; // If using Next.js App Router
-import { useState, ChangeEvent, FormEvent,useEffect ,useLayoutEffect} from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "../../components/styles/login.module.css";
@@ -30,33 +30,34 @@ const Login = () => {
 
     if (res.ok) {
       const data = await res.json();
-      localStorage.setItem("token",data.token);
-      localStorage.setItem("userId",data.user.id);
-      console.log(data.token);
-      console.log("user ID ", data.user.id);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.user.id);
+      console.log("Token:", data.token);
+      console.log("User ID:", data.user.id);
+
       // Redirect to /appointment after successful login
-      router.replace("/appointment"); 
-      
-       
-      
-      
+      router.replace("/appointment");
     } else {
       alert("Error occurred while logging in!");
     }
   };
+
+  // Google Login Handler
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:3000/google";
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login"); // Redirect to login if no token
-    }else if(token){
-      router.replace('/appointment')
+    if (token) {
+      router.replace("/appointment"); // Redirect if token exists
     }
   }, []);
+
   // Handle input changes
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  
 
   return (
     <div className={styles["login-container"]}>
@@ -95,6 +96,21 @@ const Login = () => {
             <p className={styles["forgot-password"]}>Forgot Password?</p>
           </div>
         </form>
+
+        {/* Google Login Button */}
+        <div className={styles["google-login"]}>
+          <button
+            className={styles["google-button"]}
+            onClick={handleGoogleLogin}
+          >
+            <img
+              src="/google-logo.png"
+              alt="Google Logo"
+              className={styles["google-logo"]}
+            />
+            Login with Google
+          </button>
+        </div>
       </div>
     </div>
   );

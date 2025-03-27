@@ -5,7 +5,8 @@ import Image from "next/image";
 import styles from "../../components/styles/appointments.module.css";
 import Footer from "@/components/footer";
 import Link from "next/link";
-
+import { useSearchParams } from "next/navigation";
+import CheckAuth from "@/components/CheckAuth";
 // ✅ Doctor Interface
 interface Doctor {
   id: number;
@@ -44,25 +45,21 @@ const fetchDoctors = async (filters: {
 };
 
 const DoctorsList = () => {
-  const route = useRouter();
+  const route = useRouter(); 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalDoctors, setTotalDoctors] = useState<number>(0);
-  const doctorsPerPage = 6; // ✅ Doctors per page
+  const doctorsPerPage = 6; //  Doctors per page
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
 
-  // 🎯 Filter States
+  //  Filter States
   const [search, setSearch] = useState<string>("");
   const [experience, setExperience] = useState<string>("");
   const [rating, setRating] = useState<string>("showAll");
   const [gender, setGender] = useState<string>("showAll");
 
-  // ✅ Debounce Timer for Search Input
-  const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
-    null
-  );
-
-  // 🧠 Fetch Doctors on Page Load & Filter Change
+ 
+  //  Fetch Doctors on Page Load & Filter Change
   useEffect(() => {
     const filters = {
       search,
@@ -87,14 +84,14 @@ const DoctorsList = () => {
       });
   }, [search, experience, rating, gender, currentPage]);
 
-  // 🎯 Handle Debounced Search
+  //  Handle Search
   const handleSearch = (value: string) => {
     setSearch(value);
     
   };
 
   
-  // 🔥 Generate Pagination with Ellipsis
+  //  Generate Pagination with Ellipsis
   const generatePageNumbers = () => {
     const totalPages = Math.ceil(totalDoctors / doctorsPerPage);
     const pageNumbers = [];
@@ -126,11 +123,11 @@ const DoctorsList = () => {
     setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(totalDoctors / doctorsPerPage)));
   };
 
-  // ✅ Go to Previous Page
+  //  Go to Previous Page
   const prevPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
-  // 🔄 Reset All Filters
+  //  Reset All Filters
   const resetFilters = () => {
     setSearch("");
     setExperience("");
@@ -140,10 +137,13 @@ const DoctorsList = () => {
     fetchDoctors({ page: 1, limit: doctorsPerPage }).then(setFilteredDoctors);
   };
 
+  
   return (
     <>
+    <CheckAuth/>
+    
       <div className={styles.container}>
-        {/* ✅ Search Bar */}
+        {/*  Search Bar */}
         <div className={styles.boxShadow}>
           <div className={styles.searchSection}>
             <div className={styles.searchTitle}>
@@ -164,7 +164,7 @@ const DoctorsList = () => {
           </div>
         </div>
 
-        {/* ✅ Doctor Count Info */}
+        {/*  Doctor Count Info */}
         <div className={styles.doctorCount}>
           <h2>{doctors.length} Doctors Available</h2>
           <p>
@@ -172,7 +172,7 @@ const DoctorsList = () => {
           </p>
         </div>
 
-        {/* ✅ Filters Section */}
+        {/*  Filters Section */}
         <div className={styles.doctorContainer}>
           <div className={styles.filters}>
             <div className={styles.filterheader}>
@@ -182,7 +182,7 @@ const DoctorsList = () => {
               </button>
             </div>
 
-            {/* ⭐️ Rating Filter */}
+            {/*  Rating Filter */}
             <div className={styles.filterGroup}>
               <h4>Rating</h4>
               {["showAll", 1, 2, 3, 4, 5].map((star) => (
@@ -199,7 +199,7 @@ const DoctorsList = () => {
               ))}
             </div>
 
-            {/* ⏳ Experience Filter */}
+            {/*  Experience Filter */}
             <div className={styles.filterGroup}>
               <h4>Experience</h4>
               {["15+", "10-15", "5-10", "3-5", "1-3", "0-1"].map((exp) => (
@@ -216,7 +216,7 @@ const DoctorsList = () => {
               ))}
             </div>
 
-            {/* 👩‍⚕️ Gender Filter */}
+            {/*  Gender Filter */}
             <div className={styles.filterGroup}>
               <h4>Gender</h4>
               {["showAll", "Male", "Female"].map((g) => (
@@ -234,7 +234,7 @@ const DoctorsList = () => {
             </div>
           </div>
 
-          {/* ✅ Doctor List Section */}
+          {/*  Doctor List Section */}
           <div className={styles.rightSection}>
             <div className={styles.doctorSection}>
               <div className={styles.doctorsList}>
@@ -247,7 +247,7 @@ const DoctorsList = () => {
                       >
                         <div>
                           <Image
-                            src="/Frame.png"
+                            src={doctor.image}
                             alt={doctor.name}
                             width={100}
                             height={100}
@@ -304,7 +304,7 @@ const DoctorsList = () => {
           </div>
         </div>
 
-        {/* ✅ Pagination Section with Ellipsis */}
+        {/*  Pagination Section with Ellipsis */}
         <div className={styles.pagination}>
         <button
             onClick={prevPage}
@@ -345,7 +345,7 @@ const DoctorsList = () => {
         </div>
       </div>
 
-      {/* ✅ Footer */}
+      {/*  Footer */}
       <Footer />
     </>
   );

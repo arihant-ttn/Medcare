@@ -1,7 +1,9 @@
+"use client"
 import Image from "next/image";
 import styles from "./styles/MainSection.module.css";
-
+import { useRouter } from "next/navigation";
 const MainSection = () => {
+  const router = useRouter();
   return (
     <div className={styles["container"]}>
       
@@ -12,7 +14,7 @@ const MainSection = () => {
             Take control of your healthcare with CareMate. Book appointments with ease, explore health blogs,
             and stay on top of your well-being, all in one place.
           </p>
-          <button className={styles["hero-button"]}>Get Started</button>
+          <button className={styles["hero-button"]} onClick={()=>router.push('/signUp')}>Get Started</button>
         </div>
         
       </div>
