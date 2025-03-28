@@ -3,7 +3,7 @@ import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "../../components/styles/login.module.css";
-
+import { useSearchParams } from "next/navigation";
 interface FormData {
   email: string;
   password: string;
@@ -17,11 +17,17 @@ const Login = () => {
 
   // Initialize router for redirect
   const router = useRouter();
-
+  const admin = "admin@gmail.com";
+  const adminPassword = "123123";
   // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    if(formData.email===admin && formData.password === adminPassword){
+      console.log("HEllo")
+      router.push("http://localhost:3002/dashboard");
+    }else
+{
     const res = await fetch("http://localhost:3000/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -41,14 +47,29 @@ const Login = () => {
       alert("Error occurred while logging in!");
     }
   };
-
+  }
   // Google Login Handler
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:3000/google";
-  };
+    
+    const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    if (token) {
+      // ✅ Store Token in Local Storage
+      localStorage.setItem("token", token);
+      console.log("Token stored:", token);
+    } else {
+      console.log("No token found");
+    }
+  }, [token]);
+  };
+ 
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token");  
     if (token) {
       router.replace("/appointment"); // Redirect if token exists
     }

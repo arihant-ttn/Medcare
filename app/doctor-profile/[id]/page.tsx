@@ -5,7 +5,7 @@ import Image from "next/image";
 import styles from "../../../components/styles/doctor-profile.module.css";
 import BookBtn from "@/components/BookBtn";
 // import CheckAuth from "@/components/CheckAuth";
-
+import ReviewSection from "@/components/reviews";
 interface Doctor {
   id: number;
   name: string;
@@ -85,8 +85,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
       {/* Book Appointment Button */}
       <BookBtn className={styles.bookButton} id={doctor.id} />
-
-    </div></>
+      <ReviewSection doctorId={doctor.id} initialReviews={doctor.reviews || []}/>
+    </div>
+    
+    </>
   );
 };
 

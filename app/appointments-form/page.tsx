@@ -13,19 +13,61 @@ const MainSection = () => {
   const searchParams = useSearchParams();
   
   
-  // ✅ Doctor ID from Query Params
+  //  Doctor ID from Query Params
   const docId = searchParams.get("id");
   const userId = localStorage.getItem("userId");
-  // ✅ States to Store Form Data
+  //  States to Store Form Data
   const [selectedShift, setSelectedShift] = useState<string | null>(null);
   const [slot, setSlot] = useState<string | null>(null);
   const [visitType, setVisitType] = useState<string>("Video Consult"); // Default
   const [hospital, setHospital] = useState<string>("Medical HeartInstitute Okhla New Delhi");
   const  [selectedDate, setSelectedDate] = useState<string | null>(null);
-  // const [userId, setUserId] = useState<number | null>(null);
-  // ✅ Simulated Logged-in User ID (Replace with actual user ID)
-   // Replace with actual logged-in userId from session/auth
-   
+ //  State to Store Booked Slots
+const [bookedSlots, setBookedSlots] = useState<{ selectedshift: string; slot: string }[]>([]);
+
+//  Fetch Booked Slots from Backend
+//  Correctly Format Date as YYYY-MM-DD
+const fetchBookedSlots = async (date: string) => {
+  if (!docId || !date) return;
+
+  // Format date as YYYY-MM-DD to match DB
+  const formattedDate = new Date(date).toISOString().split("T")[0]; // Example: 2025-03-28
+
+  try {
+    const res = await fetch(
+      `http://localhost:3000/get-bookedSlots?doctorId=${docId}&selectedDate=${formattedDate}`
+    );
+    const data = await res.json();
+    console.log(data.data);
+    if (data.success) {
+      setBookedSlots(data.data);
+    } else {
+      setBookedSlots([]);
+    }
+  } catch (error) {
+    console.error("❌ Error fetching booked slots:", error);
+  }
+};
+
+
+//  Call fetchBookedSlots when Date is Selected
+useEffect(() => {
+  if (selectedDate) {
+    fetchBookedSlots(selectedDate);
+  }
+}, [selectedDate]);
+// ✅ Check if Slot is Already Booked
+// ✅ Check if Slot is Already Booked
+const isSlotBooked = (shift: string, slotTime: string) => {
+  const isBooked = bookedSlots.some(
+    (bookedSlot) => bookedSlot.slot === slotTime && bookedSlot.selectedshift === shift
+  );
+
+  // 📚 Log for Debugging
+  console.log(`Shift: ${shift}, Slot: ${slotTime}, Is Booked: ${isBooked}`);
+  return isBooked;
+};
+
   // ✅ Handle Slot Selection
   const handleSlotSelection = (shift: string, slotTime: string) => {
     console.log(`Selected Shift: ${shift}, Slot: ${slotTime}`);
@@ -45,7 +87,9 @@ const MainSection = () => {
 
   // ✅ Handle Calendar Date Selection
   const handleDateSelection = (date: string) => {
-    setSelectedDate(date);
+    const formattedDate = new Date(date).toISOString().split("T")[0];
+    setSelectedDate(formattedDate);
+    console.log("selected Date" , selectedDate);
   };
 
   // 🎯 Send Data to Backend on Submit
@@ -173,17 +217,21 @@ const MainSection = () => {
                 </h4>
                 <hr />
                 <div className={styles["slot-container"]}>
-                  {["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM"].map((time) => (
-                    <button
-                      key={time}
-                      className={`${styles["slot-btn"]} ${
-                        slot === time && selectedShift === "Morning" ? styles["activeSlot"] : ""
-                      }`}
-                      onClick={() => handleSlotSelection("Morning", time)}
-                    >
-                      {time}
-                    </button>
-                  ))}
+                {["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM"].map(
+  (time) => (
+    <button
+      key={time}
+      className={`${styles["slot-btn"]} ${
+        slot === time && selectedShift === "Morning" ? styles["activeSlot"] : ""
+      }`}
+      onClick={() => handleSlotSelection("Morning", time)}
+      disabled={isSlotBooked("Morning", time)}
+    >
+      {time}
+    </button>
+  )
+)}
+
                 </div>
               </div>
 
@@ -202,17 +250,21 @@ const MainSection = () => {
                 </h4>
                 <hr />
                 <div className={styles["slot-container"]}>
-                  {["3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM"].map((time) => (
-                    <button
-                      key={time}
-                      className={`${styles["slot-btn"]} ${
-                        slot === time && selectedShift === "Afternoon" ? styles["activeSlot"] : ""
-                      }`}
-                      onClick={() => handleSlotSelection("Afternoon", time)}
-                    >
-                      {time}
-                    </button>
-                  ))}
+                {["3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM"].map(
+  (time) => (
+    <button
+      key={time}
+      className={`${styles["slot-btn"]} ${
+        slot === time && selectedShift === "Afternoon" ? styles["activeSlot"] : ""
+      }`}
+      onClick={() => handleSlotSelection("Afternoon", time)}
+      disabled={isSlotBooked("Afternoon", time)}
+    >
+      {time}
+    </button>
+  )
+)}
+
                 </div>
               </div>
             </div>

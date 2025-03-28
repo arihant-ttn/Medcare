@@ -249,8 +249,8 @@ const DoctorsList = () => {
                           <Image
                             src={doctor.image}
                             alt={doctor.name}
-                            width={100}
-                            height={100}
+                            width={150}
+                            height={180}
                             className={styles.image}
                           />
                           <h3>{doctor.name}</h3>

@@ -315,3 +315,9 @@
       width: 100%;
     }
   }
+  .slot-btn:disabled {
+    background-color: #ccc; /* Grey out disabled buttons */
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  

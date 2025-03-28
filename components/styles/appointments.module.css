@@ -2,7 +2,7 @@
   
   margin: auto;
   /* padding: 20px; */
-  /* height: calc(100vh - 80px); */
+  /* height: calc(10  0vh - 80px); */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -188,7 +188,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap:40px;
+  gap:30px;
   text-align: center;
   transition: 0.3s ease-in-out;
   height: 60%;
@@ -198,7 +198,7 @@
 .rateSpecial{
   display: flex;
   justify-content: space-between;
-  gap: 40px;
+  gap: 30px;
   align-items: center;
   width: 100%;
 }
@@ -206,7 +206,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .card:hover {
@@ -235,7 +235,7 @@
 }
 
 .bookBtn:hover {
-  background: #0056b3;
+  background: #1C4A2A;
 }
 
 .noResults {
