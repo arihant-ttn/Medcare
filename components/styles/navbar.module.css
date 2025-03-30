@@ -5,6 +5,7 @@
     height: 80px;
     padding: 20px 60px 20px 60px;
     align-items: center;
+    width: 100%;
 }
 .link-list{
     display: flex;
@@ -181,4 +182,25 @@
       font-size: 12px;
     }
   }
+
+  /* @media (max-width:768px) {
+    .nav-container{
+      width: 768px;
+    }
+  }
   
+  @media((min-width:769) and (max-width:1024px)) {
+    .nav-container{
+      width: 900px;
+    }
+  }
+  @media (max-width:320px){
+    .nav-container{
+      width:320px  ;
+    }
+  }
+  @media ((min-widht:321px) and (max-width:375px)){
+    .nav-container{
+      width:375px  ;
+    }
+  } */

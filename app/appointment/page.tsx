@@ -5,9 +5,9 @@ import Image from "next/image";
 import styles from "../../components/styles/appointments.module.css";
 import Footer from "@/components/footer";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+
 import CheckAuth from "@/components/CheckAuth";
-// ✅ Doctor Interface
+//  Doctor Interface
 interface Doctor {
   id: number;
   name: string;
@@ -18,7 +18,7 @@ interface Doctor {
   image: string;
 }
 
-// ✅ Fetch Doctors from API
+//  Fetch Doctors from API
 const fetchDoctors = async (filters: {
   search?: string;
   rating?: string;
@@ -33,19 +33,19 @@ const fetchDoctors = async (filters: {
     )
   );
   const queryParams = new URLSearchParams(filteredParams as any).toString();
-  console.log("API Request URL:", `http://localhost:3000/listDoctors?${queryParams}`);
+  // console.log("API Request URL:", `http://localhost:3000/listDoctors?${queryParams}`);
 
   const res = await fetch(`http://localhost:3000/listDoctors?${queryParams}`);
 
   if (!res.ok) throw new Error("Failed to fetch doctors");
 
   const data = await res.json();
-  console.log("data", data);
+  // console.log("data", data);
   return data;
 };
 
 const DoctorsList = () => {
-  const route = useRouter(); 
+  const route = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalDoctors, setTotalDoctors] = useState<number>(0);
   const doctorsPerPage = 6; //  Doctors per page
@@ -53,44 +53,92 @@ const DoctorsList = () => {
   const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
 
   //  Filter States
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const [experience, setExperience] = useState<string>("");
   const [rating, setRating] = useState<string>("showAll");
   const [gender, setGender] = useState<string>("showAll");
 
- 
   //  Fetch Doctors on Page Load & Filter Change
   useEffect(() => {
     const filters = {
-      search,
+      search: searchQuery || undefined,
       rating: rating !== "showAll" ? rating : undefined,
       experience: experience || undefined,
       gender: gender !== "showAll" ? gender : undefined,
       page: currentPage,
       limit: doctorsPerPage,
     };
-
+  
+    updateURL(); //  Update URL on state change
+  
     fetchDoctors(filters)
       .then((data) => {
-        console.log("✅ Fetched Data:", data);
         setFilteredDoctors(data.doctors);
         setTotalDoctors(data.totalDoctors);
         setDoctors(data.fDoctors);
       })
       .catch((error) => {
-        console.error("❌ Error fetching doctors:", error);
+        console.error("Error fetching doctors:", error);
         setFilteredDoctors([]);
         setTotalDoctors(0);
       });
-  }, [search, experience, rating, gender, currentPage]);
-
+  }, [searchQuery, experience, rating, gender, currentPage]);
+  
+  useEffect(() => {
+    //  Parse URL Query Parameters
+    const searchParams = new URLSearchParams(window.location.search);
+  
+    //  Set Initial States from URL
+    const searchValue = searchParams.get("search") || "";
+    const experienceValue = searchParams.get("experience") || "";
+    const ratingValue = searchParams.get("rating") || "showAll";
+    const genderValue = searchParams.get("gender") || "showAll";
+    const pageValue = parseInt(searchParams.get("page") || "1", 10);
+  
+    setSearch(searchValue);
+    setSearchQuery(searchValue);
+    setExperience(experienceValue);
+    setRating(ratingValue);
+    setGender(genderValue);
+    setCurrentPage(pageValue);
+  }, []);
+  const updateURL = () => {
+    const queryParams = new URLSearchParams();
+  
+    if (searchQuery) queryParams.set("search", searchQuery);
+    if (experience) queryParams.set("experience", experience);
+    if (rating !== "showAll") queryParams.set("rating", rating);
+    if (gender !== "showAll") queryParams.set("gender", gender);
+    queryParams.set("page", currentPage.toString());
+  
+    //  Push updated URL with query params
+    route.push(`?${queryParams.toString()}`);
+  };
+  
+  
   //  Handle Search
+   // Holds final search query
+
+  //  Handle Input Change
   const handleSearch = (value: string) => {
-    setSearch(value);
-    
+    setSearch(value); // Only update input value
   };
 
-  
+  //  Handle Search on Button Click
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!search.trim()) {
+      alert("Please enter a valid search query!");
+      return;
+    }
+
+    //  Set search query only on button click
+    setSearchQuery(search);
+    console.log(`Searching for: ${search}`);
+  };
+
   //  Generate Pagination with Ellipsis
   const generatePageNumbers = () => {
     const totalPages = Math.ceil(totalDoctors / doctorsPerPage);
@@ -120,28 +168,37 @@ const DoctorsList = () => {
   };
 
   const nextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(totalDoctors / doctorsPerPage)));
+    setCurrentPage((prev) => {
+      const nextPage = Math.min(prev + 1, Math.ceil(totalDoctors / doctorsPerPage));
+      updateURL(); //  Update URL on page change
+      return nextPage;
+    });
   };
-
-  //  Go to Previous Page
+  
   const prevPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
+    setCurrentPage((prev) => {
+      const prevPage = Math.max(prev - 1, 1);
+      updateURL(); //  Update URL on page change
+      return prevPage;
+    });
   };
+  
   //  Reset All Filters
   const resetFilters = () => {
     setSearch("");
+    setSearchQuery("");
     setExperience("");
     setRating("showAll");
     setGender("showAll");
     setCurrentPage(1);
-    fetchDoctors({ page: 1, limit: doctorsPerPage }).then(setFilteredDoctors);
+    updateURL(); // Reset URL on filter reset
   };
-
   
+
   return (
     <>
-    <CheckAuth/>
-    
+      <CheckAuth />
+
       <div className={styles.container}>
         {/*  Search Bar */}
         <div className={styles.boxShadow}>
@@ -150,16 +207,20 @@ const DoctorsList = () => {
               Find a doctor at your own ease
             </div>
 
-            <div className={styles.searchBar}>
+            <div >
+              <form onSubmit={handleSubmit} className={styles.searchBar}>
               <input
                 type="text"
                 placeholder="Search for doctors..."
                 value={search}
                 onChange={(e) => handleSearch(e.target.value)}
               />
-              <button type="submit" className={styles.searchBtn}>
+              <button type="submit" 
+               className={styles.searchBtn}
+               disabled={!search.trim()}>
                 Search
               </button>
+              </form>
             </div>
           </div>
         </div>
@@ -306,7 +367,7 @@ const DoctorsList = () => {
 
         {/*  Pagination Section with Ellipsis */}
         <div className={styles.pagination}>
-        <button
+          <button
             onClick={prevPage}
             className={`${styles.dirBtn} ${
               currentPage === 1 ? styles.disabledBtn : ""

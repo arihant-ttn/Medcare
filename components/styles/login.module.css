@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url("../../public/loginBackground.png") center/cover no-repeat;
+    background: url("../../public/loginBackground.png") center/cover ;
     position: relative;
     
   }
@@ -81,9 +81,6 @@
     background-color: #1C4A2A;
   }
   
-  button:hover {
-    background: #0056b3;
-  }
   .reset-button{
     background-color:#C6B09A;
     ;
@@ -118,4 +115,59 @@
   .signup-message a:hover {
     text-decoration: underline;
   }
+  .google-login{
   
+    width: 100%;
+    padding: 10px;
+
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .google-button{
+    /* width: 100%;
+    padding: 10px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer; */
+    border: none;
+  }
+
+  .google-logo{
+    height: 30px;
+    width: 15x;
+  }
+  /* @media(max-width:768px) {
+    .login-container{
+      width: 768px  ;
+      height: 636px;
+
+    }
+    .login-box{
+      backdrop-filter:initial
+    }
+    .login-form{
+      font-size: 18px;
+    }
+  }
+  @media(max-width:425px){
+    .login-container{
+      width: 320px;
+      height: 636px;
+    }
+  } */
+
+
+  @media ((min-width:769px) and (max-width:1024px) ) {
+      .login-container{
+        width: 1156px;
+        height: 900px;
+      }
+  } 

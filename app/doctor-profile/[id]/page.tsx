@@ -18,17 +18,18 @@ interface Doctor {
   description: string;
   morning_time_slot:string;
   evening_time_slot:string;
+  image:string;
 }
 
 const getDoctorsData = async (): Promise<Doctor[]> => {
   
-  const res = await fetch("http://localhost:3000/listDoctors"); // Use relative path
+  const res = await fetch("http://localhost:3000/manageDoctors/getAllDoctors"); // Use relative path
   
   if (!res.ok) throw new Error("Failed to fetch doctors");
   const data= await res.json();
   
   
-  return data.doctors;
+  return data.data;
 };
 
 export const generateStaticParams = async () => {
@@ -52,7 +53,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
 
         <Image
-          src="/Frame.png"
+          src={doctor.image}
           alt={doctor.name}
           width={100}
           height={100}
@@ -69,9 +70,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
       <div className={styles.reviews}>
         <strong>Patient Reviews:</strong>
         <ul>
-          {doctor.reviews.map((review, index) => (
-            <li key={index}>⭐ {review}</li>
-          ))}
+          {doctor.reviews}
         </ul>
       </div>
 
@@ -85,7 +84,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
       {/* Book Appointment Button */}
       <BookBtn className={styles.bookButton} id={doctor.id} />
-      <ReviewSection doctorId={doctor.id} initialReviews={doctor.reviews || []}/>
+      <ReviewSection doctorId={doctor.id}/>
     </div>
     
     </>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, FormEvent } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import styles from "./styles/reset-password.module.css"; // ✅ Import External CSS
+import styles from "../../components/styles/reset-password.module.css"; //  Import External CSS
 
 const ResetPassword: React.FC = () => {
   const [newPassword, setNewPassword] = useState<string>("");
@@ -38,7 +38,7 @@ const ResetPassword: React.FC = () => {
       alert(data.message);
 
       if (res.ok) {
-        router.push("/login"); //  Redirect to login after success
+        router.push("/login"); //Redirect to login after success
       }
     } catch (error) {
       console.error("Error resetting password:", error);

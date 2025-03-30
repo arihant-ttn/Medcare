@@ -10,7 +10,7 @@ import styles from "./styles/navbar.module.css";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [loggingIn, setLoggingIn] = useState(true); // ✅ Prevent initial flicker
+  const [loggingIn, setLoggingIn] = useState(true); //  Prevent initial flicker
   const router = useRouter();
   const pathname = usePathname();
 
@@ -26,14 +26,12 @@ const Navbar = () => {
   useEffect(() => {
     checkToken();
 
-    // ✅ Set loggingIn to false to render UI
+   
     
-  }, [pathname]); // Empty dependency array - runs once on mount
+  }, [pathname]); 
 
-  // ✅ Show nothing (or a loader) until login state is verified
- 
-
-  // ✅ Handle Logout - Clear token and update state dynamically
+  
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     setLoggedIn(false);
@@ -84,8 +82,8 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link href="/reviews" onClick={() => setIsOpen(false)}>
-              Reviews
+            <Link href="/Emergency" onClick={() => setIsOpen(false)}>
+              Emergency
             </Link>
           </li>
         </ul>
@@ -94,8 +92,8 @@ const Navbar = () => {
         <div className={`${styles.buttons} ${isOpen ? styles.show : ""}`}>
           {loggedIn ? (
             <div className="relative">
-              <button className={styles["profile-btn"]}>Profile</button>
-              <button onClick={handleLogout} className={styles["logout-btn"]}>
+              
+              <button onClick={handleLogout} className={styles["login"]}>
                 Logout
               </button>
             </div>

@@ -4,6 +4,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "../../components/styles/login.module.css";
 import { useSearchParams } from "next/navigation";
+import dotenv from "dotenv";
+dotenv.config();
+import CustomToast from "@/components/customToast";
+
 interface FormData {
   email: string;
   password: string;
@@ -14,19 +18,27 @@ const Login = () => {
     email: "",
     password: "",
   });
-
+  
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [toastType, setToastType] = useState<"success" | "error" | "info">(
+      "info"
+    );
   // Initialize router for redirect
   const router = useRouter();
-  const admin = "admin@gmail.com";
-  const adminPassword = "123123";
+  // const admin = process.env.ADMIN_EMAIL;
+  const admin = "admin@gmail.com"
+  // const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminPassword = '123123';
+  console.log(admin);
   // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if(formData.email===admin && formData.password === adminPassword){
       console.log("HEllo")
-      router.push("http://localhost:3002/dashboard");
-    }else
+      window.open("http://localhost:3002/dashboard", "_blank");
+
+    }
 {
     const res = await fetch("http://localhost:3000/login", {
       method: "POST",
@@ -43,9 +55,16 @@ const Login = () => {
 
       // Redirect to /appointment after successful login
       router.replace("/appointment");
+      setToastMessage("Logging In");
+      setToastType("success");
     } else {
-      alert("Error occurred while logging in!");
+      console.log("hello toast")
+        setToastMessage("incorrect Password or email");
+        setToastType("info");
+      
+      
     }
+
   };
   }
   // Google Login Handler
@@ -74,15 +93,19 @@ const Login = () => {
       router.replace("/appointment"); // Redirect if token exists
     }
   }, []);
-
+ 
   // Handle input changes
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
+    <>
+    {toastMessage && <CustomToast message={toastMessage} type={toastType} />}
     <div className={styles["login-container"]}>
       {/* Login Form */}
+    
+
       <div className={styles["login-box"]}>
         <div className={styles["login-header"]}>
           <h2>Login</h2>
@@ -114,7 +137,7 @@ const Login = () => {
             <button className={styles["reset-button"]} type="reset">
               Reset
             </button>
-            <p className={styles["forgot-password"]}>Forgot Password?</p>
+            <p className={styles["forgot-password"]} onClick={()=>router.push('/forgot-password')}>Forgot Password?</p>
           </div>
         </form>
 
@@ -125,15 +148,16 @@ const Login = () => {
             onClick={handleGoogleLogin}
           >
             <img
-              src="/google-logo.png"
+              src="/google.png"
               alt="Google Logo"
               className={styles["google-logo"]}
             />
-            Login with Google
           </button>
+          
         </div>
       </div>
     </div>
+    </>
   );
 };
 
