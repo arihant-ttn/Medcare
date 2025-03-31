@@ -25,17 +25,15 @@ const Login = () => {
     );
   // Initialize router for redirect
   const router = useRouter();
-  // const admin = process.env.ADMIN_EMAIL;
-  const admin = "admin@gmail.com"
-  // const adminPassword = process.env.ADMIN_PASSWORD;
-  const adminPassword = '123123';
-  console.log(admin);
+  const admin = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+  // const admin = "admin@gmail.com"
+  const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+
   // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if(formData.email===admin && formData.password === adminPassword){
-      console.log("HEllo")
       window.open("http://localhost:3002/dashboard", "_blank");
 
     }
