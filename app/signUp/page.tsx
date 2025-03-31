@@ -3,7 +3,7 @@ import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "../../components/styles/signUp.module.css";
-
+import CustomToast from "@/components/customToast";
 interface FormData {
   name: string;
   email: string;
@@ -18,8 +18,11 @@ const SignUp = () => {
   });
 
   const router = useRouter();
-
-  // ✅ Redirect if token exists in localStorage
+   const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [toastType, setToastType] = useState<"success" | "error" | "info">(
+      "info"
+    );
+  //  Redirect if token exists in localStorage
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -27,7 +30,7 @@ const SignUp = () => {
     }
   }, [router]);
 
-  // ✅ Handle form submission
+  //  Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -39,29 +42,33 @@ const SignUp = () => {
         },
         body: JSON.stringify(formData), // Convert form data to JSON
       });
-      console.log("Hello")
-      console.log(response);
+      // console.log("Hello")
+      // console.log(response);
       // const data = await response.json()
       // console.log(data);
       console.log("HTTP Respsonse ", response.status);
       // console.log(formData);
       if (response.status == 409) {
-        // ❗️ 409 Conflict - User already exists
-        alert("User already exists. Please try logging in.");
+        //  409 Conflict - User already exists
+        setToastMessage("user Already exists")
+        setToastType('info')
       } else if (response.ok) {
         const data = await response.json();
-        alert("Sign Up Successful!");
+        setToastMessage("user Registered Successfully")
+        setToastType('success')
         router.push("/login"); // Redirect to login page
       } else {
         alert("Error occurred while signing up!");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Failed to connect to server. Please try again later.");
+      setToastMessage("Failed to connect to server")
+        setToastType('error')
+      // alert("Failed to connect to server. Please try again later.");
     }
   };
 
-  // ✅ Handle input changes
+  //  Handle input changes
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -69,6 +76,7 @@ const SignUp = () => {
   return (
     <div className={styles["login-container"]}>
       {/* Sign Up Form */}
+      {toastMessage && <CustomToast message={toastMessage} type={toastType} />}
       <div className={styles["login-box"]}>
         <div className={styles["login-header"]}>
           <h2>Sign Up</h2>

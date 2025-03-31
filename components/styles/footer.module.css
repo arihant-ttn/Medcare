@@ -22,7 +22,7 @@
   }
   
   .icon:hover {
-    color: #25d366; /* WhatsApp green */
+    color: #25d366; 
   }
   
   @media (max-width: 768px){

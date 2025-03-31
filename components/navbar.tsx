@@ -14,24 +14,17 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-
-  const checkToken = ()=>{
-    const token = localStorage.getItem("token"); 
-    if (token){
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
       setLoggedIn(true);
-    }  
+    }
+  };
 
-  }
- 
   useEffect(() => {
     checkToken();
+  }, [pathname]);
 
-   
-    
-  }, [pathname]); 
-
-  
-  
   const handleLogout = () => {
     localStorage.removeItem("token");
     setLoggedIn(false);
@@ -92,7 +85,6 @@ const Navbar = () => {
         <div className={`${styles.buttons} ${isOpen ? styles.show : ""}`}>
           {loggedIn ? (
             <div className="relative">
-              
               <button onClick={handleLogout} className={styles["login"]}>
                 Logout
               </button>

@@ -2,16 +2,10 @@
 import { useState, useEffect } from "react";
 import styles from "./styles/reviews.module.css";
 import CustomToast from "./customToast";
-const ReviewSection = ({
-  doctorId,
-
-}: {
-  doctorId: number;
-  
-}) => {
+const ReviewSection = ({ doctorId }: { doctorId: number }) => {
   const [rating, setRating] = useState<number>(0);
   const [hover, setHover] = useState<number>(0);
- const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error" | "info">(
     "info"
   );
@@ -23,10 +17,9 @@ const ReviewSection = ({
       return;
     }
     const reviewData = {
-        doctorId,
-        rating, 
-      };
-      
+      doctorId,
+      rating,
+    };
 
     //  Send review to API
     const res = await fetch("http://localhost:3000/updateRating", {
@@ -40,8 +33,7 @@ const ReviewSection = ({
       //  Update reviews dynamically
       setToastMessage("Review Submitted");
       setToastType("success");
-    //   alert("Successfully Submitted");
-
+      //   alert("Successfully Submitted");
 
       setRating(0); // Reset rating after submission
     } else {
@@ -50,9 +42,8 @@ const ReviewSection = ({
   };
 
   return (
-   
     <div className={styles.reviews}>
-         {toastMessage && <CustomToast message={toastMessage} type={toastType} />}
+      {toastMessage && <CustomToast message={toastMessage} type={toastType} />}
       <strong>Patient Rating:</strong>
 
       {/* Add Review Form */}
@@ -60,24 +51,25 @@ const ReviewSection = ({
         <div className={styles.starRating}>
           {[...Array(5)].map((_, index) => {
             const currentRating = index + 1;
-           // Inside the map loop of starRating
-return (
-    <span
-      key={index}
-      className={`${styles.star} ${
-        currentRating <= (hover || rating) ? styles.filled : styles.empty
-      }`}
-      onClick={() => {
-        console.log(`Star clicked with rating: ${currentRating}`); // ✅ Debug
-        setRating(currentRating);
-      }}
-      onMouseEnter={() => setHover(currentRating)}
-      onMouseLeave={() => setHover(0)}
-    >
-      ★
-    </span>
-  );
-  
+            // Inside the map loop of starRating
+            return (
+              <span
+                key={index}
+                className={`${styles.star} ${
+                  currentRating <= (hover || rating)
+                    ? styles.filled
+                    : styles.empty
+                }`}
+                onClick={() => {
+                  console.log(`Star clicked with rating: ${currentRating}`); //  Debug
+                  setRating(currentRating);
+                }}
+                onMouseEnter={() => setHover(currentRating)}
+                onMouseLeave={() => setHover(0)}
+              >
+                ★
+              </span>
+            );
           })}
         </div>
         <button type="submit" className={styles.submitBtn}>

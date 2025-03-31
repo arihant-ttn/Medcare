@@ -23,7 +23,7 @@ interface Doctor {
 
 const getDoctorsData = async (): Promise<Doctor[]> => {
   
-  const res = await fetch("http://localhost:3000/manageDoctors/getAllDoctors"); // Use relative path
+  const res = await fetch("http://localhost:3000/manageDoctors/getAllDoctors"); 
   
   if (!res.ok) throw new Error("Failed to fetch doctors");
   const data= await res.json();

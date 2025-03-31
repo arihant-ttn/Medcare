@@ -73,7 +73,7 @@ const MainSection = () => {
     );
 
     //  Log for Debugging
-    console.log(`Shift: ${shift}, Slot: ${slotTime}, Is Booked: ${isBooked}`);
+    // console.log(`Shift: ${shift}, Slot: ${slotTime}, Is Booked: ${isBooked}`);
     return isBooked;
   };
 
@@ -106,7 +106,9 @@ const MainSection = () => {
   //  Send Data to Backend on Submit
   const handleSubmit = async () => {
     if (!slot || !selectedDate || !selectedShift) {
-      alert("❗️ Please select a slot, date, and shift.");
+      // alert(" Please select a slot, date, and shift.");
+      setToastMessage("Please select a slot, date, and shift.")
+        setToastType('info')
       return;
     }
 
@@ -120,7 +122,7 @@ const MainSection = () => {
       selectedDate,
     };
 
-    console.log("Sending Data to Backend:", appointmentData);
+    // console.log("Sending Data to Backend:", appointmentData);
 
     try {
       const res = await fetch("http://localhost:3000/appointments", {
@@ -133,15 +135,18 @@ const MainSection = () => {
 
       if (res.ok) {
         // alert(" Appointment sent successfully!");
-        setToastMessage("Request sent");
-        setToastType("success");
+        setToastMessage("Sending Request ");
+        setToastType("info");
         router.push("/appointment-success");
       } else {
         throw new Error("Failed to book appointment.");
       }
     } catch (error) {
       console.error(" Error:", error);
-      alert("Failed to book appointment. Please try again.");
+      // alert("Failed to book appointment. Please try again.");
+      setToastMessage("Failed to book")
+        setToastType('error')
+
     }
   };
 

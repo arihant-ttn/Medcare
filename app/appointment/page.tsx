@@ -33,14 +33,14 @@ const fetchDoctors = async (filters: {
     )
   );
   const queryParams = new URLSearchParams(filteredParams as any).toString();
-  // console.log("API Request URL:", `http://localhost:3000/listDoctors?${queryParams}`);
+  
 
   const res = await fetch(`http://localhost:3000/listDoctors?${queryParams}`);
 
   if (!res.ok) throw new Error("Failed to fetch doctors");
 
   const data = await res.json();
-  // console.log("data", data);
+
   return data;
 };
 
@@ -116,10 +116,6 @@ const DoctorsList = () => {
     route.push(`?${queryParams.toString()}`);
   };
   
-  
-  //  Handle Search
-   // Holds final search query
-
   //  Handle Input Change
   const handleSearch = (value: string) => {
     setSearch(value); // Only update input value
